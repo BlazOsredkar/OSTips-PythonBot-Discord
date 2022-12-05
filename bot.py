@@ -14,6 +14,7 @@ import ffmpeg
 import json
 import urllib.request
 from PIL import Image, ImageDraw, ImageFont
+from requests import get
 #read from env file
 
 
@@ -199,7 +200,38 @@ async def createrole(ctx, *, role):
         await ctx.send(f"Created role {role}")
     else:
         await ctx.send("You do not have permission to use this command")
+
+
+#play sound
+@bot.command(pass_context=True)
+async def play(ctx, url):
+    #check if user is admin
+    if ctx.message.author.guild_permissions.administrator:
+        #check if bot is in a voice channel
+        if ctx.voice_client is not None:
+            return await ctx.voice_client.move_to(ctx.author.voice.channel)
+
+        await ctx.author.voice.channel.connect()
+        ctx.voice_client.play(discord.FFmpegPCMAudio(executable="C:/ffmpeg/bin/ffmpeg.exe", source=url))
+    else:
+        await ctx.send("You do not have permission to use this command")
+
+
+#play a sound when administrator uses .playthis and use message as filename
+@bot.command(pass_context=True)
+async def playthis(ctx, message):
+    #check if user is admin
+    if ctx.message.author.guild_permissions.administrator:
+        #check if bot is in a voice channel
+        if ctx.voice_client is not None:
+            return await ctx.voice_client.move_to(ctx.author.voice.channel)
+
+        await ctx.author.voice.channel.connect()
+        if(message == 'test'):
+            ctx.voice_client.play(discord.FFmpegPCMAudio(executable="C:/ffmpeg/bin/ffmpeg.exe", source="audio/test.mp3"))
         
+    else:
+        await ctx.send("You do not have permission to use this command")
 
 
 
