@@ -190,8 +190,16 @@ async def dm(ctx, member : discord.Member, *, message=None):
     await ctx.send("Message sent!")
     await ctx.message.delete()
 
-
-
+#create role on .createrole with basic permissions
+@bot.command(pass_context=True)
+async def createrole(ctx, *, role):
+    #check if user is admin
+    if ctx.message.author.guild_permissions.administrator:
+        await ctx.guild.create_role(name=role, permissions=discord.Permissions(permissions=8))
+        await ctx.send(f"Created role {role}")
+    else:
+        await ctx.send("You do not have permission to use this command")
+        
 
 
 
